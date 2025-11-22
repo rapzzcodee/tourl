@@ -2,20 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(MyApp());
+}
 
 class MyApp extends StatefulWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  late final WebViewController controller;
   bool online = true;
 
   @override
   void initState() {
     super.initState();
     cekKoneksi();
+
+    controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse("https://google.com"));
   }
 
   Future<void> cekKoneksi() async {
@@ -30,10 +37,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         body: online
-            ? WebView(
-                initialUrl: 'https://google.com',
-                javascriptMode: JavascriptMode.unrestricted,
-              )
+            ? WebViewWidget(controller: controller)
             : Center(
                 child: Text(
                   "Maaf, butuh koneksi internet.",
