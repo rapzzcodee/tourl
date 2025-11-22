@@ -6,16 +6,21 @@ void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
   bool online = true;
+  late final WebViewController controller;
 
   @override
   void initState() {
     super.initState();
     cekKoneksi();
+
+    controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse('https://google.com'));
   }
 
   Future<void> cekKoneksi() async {
@@ -30,10 +35,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         body: online
-            ? WebView(
-                initialUrl: 'https://google.com',
-                javascriptMode: JavascriptMode.unrestricted,
-              )
+            ? WebViewWidget(controller: controller)
             : Center(
                 child: Text(
                   "Maaf, butuh koneksi internet.",
